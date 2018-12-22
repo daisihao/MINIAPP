@@ -1,1 +1,2 @@
-<like-cmp like="{{classic.likestatus}}" count="{{classic.fav_nums}}"/>
+<like-cmp  bind:like="onLike" like="{{classic.likestatus}}" count="{{classic.fav_nums}}"/>
+<movie-cmp img="{{classic.image}}" content="{{classic.content}}"></movie-cmp>
