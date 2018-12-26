@@ -1,2 +1,12 @@
-<like-cmp  bind:like="onLike" like="{{classic.likestatus}}" count="{{classic.fav_nums}}"/>
-<movie-cmp img="{{classic.image}}" content="{{classic.content}}"></movie-cmp>
+<view class="container">
+  <view class='header'>
+    <episode-cmp class="episode" index="{{classic.index}}"></episode-cmp>
+    <like-cmp class="like" bind:like="onLike" like="{{classic.likestatus}}" count="{{classic.fav_nums}}" />
+  </view>
+  <view>
+  <movie-cmp img="{{classic.image}}" content="{{classic.content}}"></movie-cmp>
+  </view>
+  <view class="navi">
+    <navi-cmp bind:left="onNext" bind:right="onPrevious" title="{{classic.title}}" first="{{first}}" latest="{{latest}}"></navi-cmp>
+  </view>
+</view>

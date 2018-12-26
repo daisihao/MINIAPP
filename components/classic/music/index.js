@@ -1,4 +1,4 @@
-// components/classic/movie/index.js
+// components/classic/music/index.js
 import { classicBeh } from '../class-beh.js'
 Component({
   /**
@@ -12,7 +12,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    pauseSrc:'images/player@wait.png',
+    playSrc:'images/player@play.png'
   },
 
   /**
