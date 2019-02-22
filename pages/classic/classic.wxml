@@ -1,10 +1,12 @@
 <view class="container">
   <view class='header'>
     <episode-cmp class="episode" index="{{classic.index}}"></episode-cmp>
-    <like-cmp class="like" bind:like="onLike" like="{{classic.likestatus}}" count="{{classic.fav_nums}}" />
+    <like-cmp class="like" bind:like="onLike" like="{{likeStatus}}" count="{{likeCount}}" />
   </view>
   <view>
-  <movie-cmp img="{{classic.image}}" content="{{classic.content}}"></movie-cmp>
+    <movie-cmp hidden="{{classic.type !=100}}" img="{{classic.image}}" content="{{classic.content}}"></movie-cmp>
+    <music-cmp wx:if="{{classic.type ==200}}" img="{{classic.image}}" content="{{classic.content}}" src="{{classic.url}}"></music-cmp>
+    <essay-cmp hidden="{{classic.type !=300}}" img="{{classic.image}}" content="{{classic.content}}"></essay-cmp>
   </view>
   <view class="navi">
     <navi-cmp bind:left="onNext" bind:right="onPrevious" title="{{classic.title}}" first="{{first}}" latest="{{latest}}"></navi-cmp>

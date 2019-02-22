@@ -1,4 +1,6 @@
-import { HTTP } from '../util/http.js'
+import {
+  HTTP
+} from '../util/http.js'
 class ClassicModel extends HTTP {
   getLatest(sCallback) {
     this.request({
@@ -6,16 +8,27 @@ class ClassicModel extends HTTP {
       success: (res) => {
         sCallback(res);
         this._setLatestIndex(res.index);
+        let key = this._getKey(res.index)
+        wx.setStorageSync(key, res);
       }
     })
   }
-  getClassic(index, nextOrPrevious,sCallback) {
-    this.request({
-      url: 'classic/' + index + '/' + nextOrPrevious,
-      success: (res) => {
-        sCallback(res);
-      }
-    })
+  getClassic(index, nextOrPrevious, sCallback) {
+    //缓存中寻找 or API
+    let key = nextOrPrevious == 'next' ? this._getKey(index + 1) : this._getKey(index - 1)
+    let classic = wx.getStorageSync(key)
+    if (!classic) {
+      this.request({
+        url: `classic/${index}/${nextOrPrevious}`,
+        success: (res) => {
+          wx.setStorageSync(this._getKey(res.index),res)
+          sCallback(res);
+        }
+      })
+    }else{
+      sCallback(classic);
+    }
+
   }
 
   isFirst(index) {
@@ -26,6 +39,10 @@ class ClassicModel extends HTTP {
     return latestIndex == index ? true : false
   }
 
+  _getKey(index) {
+    let key = 'classic-' + index
+    return key
+  }
   _setLatestIndex(index) {
     wx.setStorageSync('latest', index)
   }
@@ -36,4 +53,6 @@ class ClassicModel extends HTTP {
   }
 }
 
-export { ClassicModel }
+export {
+  ClassicModel
+}
