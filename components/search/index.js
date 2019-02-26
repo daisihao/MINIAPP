@@ -12,11 +12,9 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    more:{
-      type:String,
-      observer:function(){
-        console.log("test----")
-      }
+    more: {
+      type: String,
+      observer: '_load_more'
     }
   },
 
@@ -24,11 +22,12 @@ Component({
    * 组件的初始数据
    */
   data: {
-    historyWords:[],
-    hotWords:[],
-    dataArray:[],
-    searching:false,
-    inputText:String
+    historyWords: [],
+    hotWords: [],
+    dataArray: [],
+    searching: false,
+    inputText: String,
+    loading: false
   },
 
   /**
@@ -40,34 +39,52 @@ Component({
     },
     onConfirm(event) {
       this.setData({
-        searching:true
+        searching: true
       })
       let word = event.detail.value || event.detail.text
-      bookModel.search(0, word).then(res=>{
+      bookModel.search(0, word).then(res => {
         this.setData({
-          dataArray:res.books,
+          dataArray: res.books,
           inputText: word
         })
         keywordModel.addToHistory(word);
       })
     },
-    onDelete(event){
+    onDelete(event) {
       this.setData({
-        searching:false
+        searching: false
+      })
+    },
+    _load_more(event) {
+      if(!this.data.inputText){
+        return
+      }
+      if(this.data.loading){
+        return
+      }
+      let length = this.data.dataArray.length
+      this.data.loading = true;
+      bookModel.search(length, this.data.inputText).then(res => {
+        let tempArray = this.data.dataArray.concat(res.books)
+        this.setData({
+          dataArray: tempArray,
+          loading:false
+        })
       })
     }
+
   },
   //组件初始化的生命周期函数
-  attached(){
+  attached() {
     let historyWords = keywordModel.getHistory();
     let hotWords = keywordModel.getHot();
     this.setData({
       historyWords: historyWords
     })
     hotWords.then(
-      res=>{
+      res => {
         this.setData({
-          hotWords:res.hot
+          hotWords: res.hot
         })
       }
     )

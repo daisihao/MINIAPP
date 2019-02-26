@@ -61,7 +61,6 @@ Page({
     this.setData({
       more:random(16)
     })
-    console.log(this.data.more)
   },
 
   /**
