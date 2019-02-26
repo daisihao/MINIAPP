@@ -12,7 +12,12 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    more:{
+      type:String,
+      observer:function(){
+        console.log("test----")
+      }
+    }
   },
 
   /**
