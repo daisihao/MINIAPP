@@ -24,32 +24,48 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    wx.showLoading();
     let bid = options.bid;
     const detail = bookModel.getDetail(bid);
     const comments = bookModel.getComments(bid);
     const likeStatus = bookModel.getLikeStatus(bid);
 
-    detail.then(res => {
-      console.log(res);
-      this.setData({
-        book: res
-      })
-    });
+    //使用Promise.all解决异步请求问题,Promise.all响应时间为最长接口时间
+    //Promise.race竞争模式,res为第一个成功的结果
+    Promise.all([detail, comments, likeStatus]).then(
+      res=>{
+        this.setData({
+          book:res[0],
+          comments:res[1].comments,
+          likeStatus: res[2].like_status,
+          likeCount: res[2].fav_nums
+        })
+        wx.hideLoading();
+      }
+    )
 
-    comments.then(res => {
-      console.log(res);
-      this.setData({
-        comments: res.comments
-      })
-    });
+    // detail.then(res => {
+    //   console.log(res);
+    //   this.setData({
+    //     book: res
+    //   })
+    // });
 
-    likeStatus.then(res => {
-      console.log(res);
-      this.setData({
-        likeStatus: res.like_status,
-        likeCount: res.fav_nums
-      })
-    });
+    // comments.then(res => {
+    //   console.log(res);
+    //   this.setData({
+    //     comments: res.comments
+    //   })
+    // });
+
+    // likeStatus.then(res => {
+    //   console.log(res);
+    //   this.setData({
+    //     likeStatus: res.like_status,
+    //     likeCount: res.fav_nums
+    //   })
+    // });
+
   },
 
   onLike(event) {
