@@ -10,7 +10,8 @@ Page({
    */
 
   data: {
-    books: []
+    books: [],
+    searching:false
   },
 
   /**
@@ -34,6 +35,18 @@ Page({
       this.setData({
         books:res
       })
+    })
+  },
+
+  onSearching:function(event){
+    this.setData({
+      searching:true
+    })
+  },
+
+  onCancel:function(event){
+    this.setData({
+      searching:false
     })
   },
 
