@@ -1,4 +1,5 @@
 <!--pages/book-detail/book-detail.wxml-->
+<wxs src="../../util/filter.wxs" module="util"/>
 <view class="container">
   <view class="head">
     <image src="{{book.image}}"></image>
@@ -9,11 +10,16 @@
     <text class="headLine">短评</text>
     <view class="comment-container">
       <block wx:for="{{comments}}" wx:key="">
+      <!-- tag-class在样式中用使用！important 修饰样式 可以强制覆盖组件的样式 -->
         <tag-cmp tag-class="ex-tag" text="{{item.content}}">
           <text class="num" slot="after">{{'+'+item.nums}}</text>
         </tag-cmp>
 
       </block>
     </view>
+  </view>
+  <view class="sub-container">
+    <text class="headLine">内容简介</text>
+    <text class="content" decode="{{true}}">{{util.format(book.summary)}}</text>
   </view>
 </view>

@@ -1,0 +1,14 @@
+//wxs不能使用ES6语法
+//wxs不等同与JavaScript
+var format = function(text) {
+  if (!text) {
+    return
+  } else {
+    var reg = getRegExp('\\\\n', 'g');
+    return text.replace(reg, '\n&nbsp;&nbsp;&nbsp;&nbsp;')
+  }
+}
+
+module.exports = {
+  format: format
+}
