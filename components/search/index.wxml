@@ -39,4 +39,8 @@
       <book-cmp book="{{item}}" class="book"></book-cmp>
     </block>
   </view>
+
+  <loading-cmp class="loading-center" wx:if="{{loadingCenter}}"></loading-cmp>
+  <loading-cmp class="loading" wx:if="{{loading}}"></loading-cmp>
+  <text class="empty-tip" wx:if="{{noneResult}}">没有搜索到书籍</text>
 </view>

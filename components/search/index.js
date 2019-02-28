@@ -5,16 +5,20 @@ import {
 import {
   BookModel
 } from '../../models/book.js'
+import {
+  paginationBev
+} from '../behaviors/pagination.js'
 const keywordModel = new KeyWordModel();
 const bookModel = new BookModel();
 Component({
   /**
    * 组件的属性列表
    */
+  behaviors: [paginationBev],
   properties: {
     more: {
       type: String,
-      observer: '_load_more'
+      observer: 'loadMore'
     }
   },
 
@@ -24,10 +28,10 @@ Component({
   data: {
     historyWords: [],
     hotWords: [],
-    dataArray: [],
     searching: false,
-    inputText: String,
-    loading: false
+    inputText: '',
+    loading: false,
+    loadingCenter: false
   },
 
   /**
@@ -35,43 +39,83 @@ Component({
    */
   methods: {
     onCancel(event) {
+      this.initiallise()
       this.triggerEvent('cancel', {}, {})
     },
     onConfirm(event) {
-      this.setData({
-        searching: true
-      })
+      this._showResult()
+      this._showLoadingCenter()
       let word = event.detail.value || event.detail.text
       bookModel.search(0, word).then(res => {
+        this.setMoreData(res.books)
+        this.setTotal(res.total)
         this.setData({
-          dataArray: res.books,
           inputText: word
         })
         keywordModel.addToHistory(word);
+        this._hideLoadingCenter()
       })
     },
     onDelete(event) {
+      this._closeResult()
+      this.initiallise()
+      this.setData({
+        inputText: ''
+      })
+    },
+    loadMore(event) {
+      if (!this.data.inputText) {
+        return
+      }
+      if (this._isLocked()) {
+        return
+      }
+      if (this.hasMore()) {
+        this._locked();
+        bookModel.search(this.getCurrentStart(), this.data.inputText).then(res => {
+          this.setMoreData(res.books)
+          this._unLocked();
+        }, () => {
+          this._unLocked();
+        })
+      }
+    },
+    _showResult() {
+      this.setData({
+        searching: true
+      })
+    },
+    _showLoadingCenter() {
+      this.setData({
+        loadingCenter: true
+      })
+    },
+    _hideLoadingCenter() {
+      this.setData({
+        loadingCenter: false
+      })
+    },
+    _closeResult() {
       this.setData({
         searching: false
       })
     },
-    _load_more(event) {
-      if(!this.data.inputText){
-        return
-      }
-      if(this.data.loading){
-        return
-      }
-      let length = this.data.dataArray.length
-      this.data.loading = true;
-      bookModel.search(length, this.data.inputText).then(res => {
-        let tempArray = this.data.dataArray.concat(res.books)
-        this.setData({
-          dataArray: tempArray,
-          loading:false
-        })
+    _isLocked() {
+      return this.data.loading ? true : false
+    },
+
+    _locked() {
+      this.setData({
+        loading:true
+      })
+    },
+
+    _unLocked() {
+      this.setData({
+        loading: false
       })
     }
+
 
   },
   //组件初始化的生命周期函数
