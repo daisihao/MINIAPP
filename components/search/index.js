@@ -67,16 +67,16 @@ Component({
       if (!this.data.inputText) {
         return
       }
-      if (this._isLocked()) {
+      if (this.isLocked()) {
         return
       }
       if (this.hasMore()) {
-        this._locked();
+        this.locked();
         bookModel.search(this.getCurrentStart(), this.data.inputText).then(res => {
           this.setMoreData(res.books)
-          this._unLocked();
+          this.unLocked();
         }, () => {
-          this._unLocked();
+          this.unLocked();
         })
       }
     },
@@ -98,21 +98,6 @@ Component({
     _closeResult() {
       this.setData({
         searching: false
-      })
-    },
-    _isLocked() {
-      return this.data.loading ? true : false
-    },
-
-    _locked() {
-      this.setData({
-        loading:true
-      })
-    },
-
-    _unLocked() {
-      this.setData({
-        loading: false
       })
     }
 
