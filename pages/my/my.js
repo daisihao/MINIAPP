@@ -1,4 +1,14 @@
 // pages/my/my.js
+import {
+  ClassicModel
+} from '../../models/classic.js'
+import {
+  BookModel
+} from '../../models/book.js'
+
+const classicModel = new ClassicModel()
+const bookModel = new BookModel()
+
 Page({
 
   /**
@@ -8,7 +18,14 @@ Page({
     hasUserInfo: true,
     userInfo: null,
     classics: [],
-    myBooksCount: 0
+    bookCount: 0
+  },
+  getMyBookCount(){
+    bookModel.getMyBookCount().then(res=>{
+      this.setData({
+        bookCount:res.count
+      })
+    })
   },
   userAuthorized() {
     wx.getSetting({
@@ -48,6 +65,7 @@ Page({
    */
   onLoad: function(options) {
     this.userAuthorized()
+    this.getMyBookCount()
     wx.getUserInfo({
       success: data => {
 

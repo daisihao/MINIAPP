@@ -16,7 +16,7 @@
     </view>
     <view class="about-us">
       <text class="description">喜欢的书</text>
-      <text class="book-num">{{myBooksCount}}</text>
+      <text class="book-num">{{bookCount}}</text>
     </view>
   </view>
 </view>
