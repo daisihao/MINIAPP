@@ -44,7 +44,7 @@
 .head-img{
   width:106rpx;
   height:34rpx;
-  margin-top:40rpx;
+  margin-top:130rpx;
 }
 
 .box image{
