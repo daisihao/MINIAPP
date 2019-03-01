@@ -7,12 +7,36 @@ Page({
   data: {
 
   },
+  userAuthorized(){
+    wx.getSetting({
+      success:data=>{
+        if(data.authSetting['scope.userInfo']){
+          wx.getUserInfo({
+            success:data=>{
+              console.log(data)
+            }
+          })
+        }else{
+          console.log("aaa")
+        }
+      }
+    })
+  },
 
+  onGetUserInfo(event){
+    let userInfo = event.detail.userInfo
+    console.log(userInfo)
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.userAuthorized()
+    wx.getUserInfo({
+      success:data=>{
 
+      }
+    })
   },
 
   /**

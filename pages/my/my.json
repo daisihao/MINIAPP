@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "imgbutton-cmp": "/components/image-button/index"
+  },
+  "backgroundColor": "#f5f5f5"
 }
